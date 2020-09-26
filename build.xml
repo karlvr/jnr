@@ -3,7 +3,6 @@
 <project name="VAquaRendering" default="install" basedir=".">
 
     <property name="debug" value="true"/>
-    <property name="bootclasspath" location="${user.home}/javalib/boot/rt8.jar" />
     <property name="java9.version" value="11" />
 
     <target name="build">
