@@ -97,6 +97,7 @@
       <mkdir dir="${classesdir}"/>
       <mkdir dir="${headersdir}"/>
 
+      <echo message="Compiling ${src}" />
       <javac source="1.8" target="1.8"
           bootclasspath="${bootclasspath}"
           classpathref="cp"
@@ -114,6 +115,7 @@
           <patternset refid="java.compile.patterns"/>
       </javac>
 
+      <echo message="Compiling ${src8}" />
       <javac source="1.8" target="1.8"
           bootclasspath="${bootclasspath}"
           classpathref="cp"
@@ -136,6 +138,7 @@
       <mkdir dir="${classesdir}"/>
       <mkdir dir="${headersdir}"/>
 
+      <echo message="Compiling ${src9}" />
       <javac
           classpathref="cp"
           encoding="UTF-8"
