@@ -782,6 +782,7 @@ public class AquaNativePainter
             case BUTTON_SEGMENTED_TEXTURED:
                 return NSSegmentStyleTexturedSquare;
             case BUTTON_SEGMENTED_TEXTURED_TOOLBAR:
+            case BUTTON_SEGMENTED_TEXTURED_TOOLBAR_ICONS:
                 return NSSegmentStyleTexturedSquare_Toolbar;
             case BUTTON_SEGMENTED_TOOLBAR:
                 return NSSegmentStyleTexturedRounded;
@@ -792,8 +793,11 @@ public class AquaNativePainter
             case BUTTON_SEGMENTED_TEXTURED_SEPARATED:
                 return NSSegmentStyleSeparated_Textured;
             case BUTTON_SEGMENTED_TEXTURED_SEPARATED_TOOLBAR:
+            case BUTTON_SEGMENTED_TEXTURED_SEPARATED_TOOLBAR_ICONS:
                 return NSSegmentStyleSeparated_Toolbar;
             case BUTTON_SEGMENTED_SLIDER:
+            case BUTTON_SEGMENTED_SLIDER_TOOLBAR:
+            case BUTTON_SEGMENTED_SLIDER_TOOLBAR_ICONS:
                 // same as rounded with the implication of select one behavior
                 return NSSegmentStyleRounded;
         }
@@ -890,10 +894,12 @@ public class AquaNativePainter
             case BUTTON_TEXTURED:
                 return NSTexturedRoundedBezelStyle;
             case BUTTON_TEXTURED_TOOLBAR:
+            case BUTTON_TEXTURED_TOOLBAR_ICONS:
                 return NSTexturedRoundedBezelStyle_Toolbar;
             case BUTTON_ROUND:
                 return NSCircularBezelStyle;
-            case BUTTON_ROUND_TOOLBAR:
+            case BUTTON_ROUND_TEXTURED:
+            case BUTTON_ROUND_TEXTURED_TOOLBAR:
                 return platformVersion >= 101100 ? NSCircularBezelStyle_Toolbar : NSCircularBezelStyle;
         }
         throw new UnsupportedOperationException();

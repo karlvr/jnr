@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016 Alan Snyder.
+ * Copyright (c) 2015-2020 Alan Snyder.
  * All rights reserved.
  *
  * You may not use, copy or modify this file, except in compliance with the license agreement. For details see
@@ -13,6 +13,7 @@ import java.util.Objects;
 import org.violetlib.jnr.aqua.AquaUIPainter.PopupButtonWidget;
 import org.violetlib.jnr.aqua.AquaUIPainter.Size;
 import org.violetlib.jnr.aqua.AquaUIPainter.UILayoutDirection;
+import org.violetlib.jnr.impl.JNRPlatformUtils;
 
 import org.jetbrains.annotations.*;
 
@@ -47,12 +48,21 @@ public class PopupButtonLayoutConfiguration
                 size = Size.REGULAR;
             }
         } else if (size == Size.LARGE) {
-            size = Size.REGULAR;
+            int platformVersion = JNRPlatformUtils.getPlatformVersion();
+            if (platformVersion < 101600 || !supportsLarge(bw)) {
+                size = Size.REGULAR;
+            }
         }
 
         this.bw = bw;
         this.size = size;
         this.ld = ld;
+    }
+
+    @Override
+    public @NotNull Object getWidget()
+    {
+        return bw;
     }
 
     public @NotNull PopupButtonWidget getPopupButtonWidget()
@@ -164,6 +174,18 @@ public class PopupButtonLayoutConfiguration
                 return false;
             default:
                 return true;
+        }
+    }
+
+    public static boolean supportsLarge(@NotNull PopupButtonWidget w)
+    {
+        switch (w)
+        {
+            case BUTTON_POP_DOWN:
+            case BUTTON_POP_UP:
+                return true;
+            default:
+                return false;
         }
     }
 }

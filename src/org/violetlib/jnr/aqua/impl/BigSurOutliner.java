@@ -17,18 +17,21 @@ import org.violetlib.geom.GeneralRoundRectangle;
 import org.violetlib.jnr.Insetter;
 import org.violetlib.jnr.aqua.AquaUIPainter;
 import org.violetlib.jnr.aqua.AquaUIPainter.ButtonWidget;
+import org.violetlib.jnr.aqua.AquaUIPainter.ComboBoxWidget;
 import org.violetlib.jnr.aqua.AquaUIPainter.Position;
 import org.violetlib.jnr.aqua.AquaUIPainter.SegmentedButtonWidget;
 import org.violetlib.jnr.aqua.AquaUIPainter.Size;
 import org.violetlib.jnr.aqua.ButtonConfiguration;
 import org.violetlib.jnr.aqua.ButtonLayoutConfiguration;
+import org.violetlib.jnr.aqua.ComboBoxLayoutConfiguration;
+import org.violetlib.jnr.aqua.PopupButtonLayoutConfiguration;
 import org.violetlib.jnr.aqua.SegmentedButtonLayoutConfiguration;
 import org.violetlib.jnr.aqua.SliderThumbLayoutConfiguration;
-import org.violetlib.jnr.impl.JNRPlatformUtils;
 
 import org.jetbrains.annotations.*;
 
 import static org.violetlib.jnr.aqua.AquaUIPainter.ButtonWidget.*;
+import static org.violetlib.jnr.aqua.AquaUIPainter.PopupButtonWidget.*;
 import static org.violetlib.jnr.aqua.AquaUIPainter.SegmentedButtonWidget.*;
 
 /**
@@ -48,7 +51,6 @@ public class BigSurOutliner
         ButtonWidget bw = g.getButtonWidget();
         Size sz = g.getSize();
         AquaUIPainter.ButtonState bs = getButtonState(g);
-        int platformVersion = JNRPlatformUtils.getPlatformVersion();
 
         double x = bounds.getX();
         double y = bounds.getY();
@@ -62,7 +64,7 @@ public class BigSurOutliner
               || bw == BUTTON_ROUND
               || bw == BUTTON_ROUND_INSET
               || bw == BUTTON_ROUND_TEXTURED
-              || bw == BUTTON_ROUND_TOOLBAR) {
+              || bw == BUTTON_ROUND_TEXTURED_TOOLBAR) {
 
             switch (bw)
             {
@@ -82,7 +84,7 @@ public class BigSurOutliner
                     width -= 1;
                     height -= 2;
                     break;
-                case BUTTON_ROUND_TOOLBAR:
+                case BUTTON_ROUND_TEXTURED_TOOLBAR:
                     width += size2D(sz, -4, -4.5, -3.5, -3.5);
                     height += size2D(sz, -4, -5, -3.5, -3.5);
                     x += size2D(sz, 2, 2, 1.5, 1.5);
@@ -155,7 +157,7 @@ public class BigSurOutliner
             corner = 6;
             y += size2D(sz, 0.5, 0, 0, 0);
             height += size2D(sz, -1, 0, 0, 0);
-        } else if (bw == BUTTON_TEXTURED || bw == BUTTON_TEXTURED_TOOLBAR) {
+        } else if (bw == BUTTON_TEXTURED || bw == BUTTON_TEXTURED_TOOLBAR || bw == BUTTON_TEXTURED_TOOLBAR_ICONS) {
             y += 1;
             height += -3;
         } else if (bw == BUTTON_DISCLOSURE_TRIANGLE) {
@@ -211,6 +213,8 @@ public class BigSurOutliner
             case BUTTON_SEGMENTED:
             case BUTTON_SEGMENTED_SEPARATED:
             case BUTTON_SEGMENTED_SLIDER:
+            case BUTTON_SEGMENTED_SLIDER_TOOLBAR:
+            case BUTTON_SEGMENTED_SLIDER_TOOLBAR_ICONS:
 
                 // The outline is used for focus rings. Full Keyboard Access causes one segment to be focusable via the
                 // keyboard. For select one controls, including tabs, it is the selected segment. The selected segment
@@ -218,7 +222,7 @@ public class BigSurOutliner
                 // the position. For select any controls, the first segment is focusable. No special case.
 
                 corner = 6;
-                if (bw == BUTTON_TAB || bw == SegmentedButtonWidget.BUTTON_SEGMENTED_SEPARATED) {
+                if (bw == BUTTON_TAB || bw == BUTTON_SEGMENTED_SLIDER || bw == SegmentedButtonWidget.BUTTON_SEGMENTED_SEPARATED) {
                     useOnly = true;
                 }
 
@@ -241,7 +245,7 @@ public class BigSurOutliner
                     }
                 }
 
-                if (bw == BUTTON_TAB) {
+                if (bw == BUTTON_TAB || bw.isSlider()) {
 
                     double widthDelta = -1.5;
                     if (sz == Size.REGULAR) {
@@ -277,12 +281,14 @@ public class BigSurOutliner
                 break;
 
             case BUTTON_SEGMENTED_TEXTURED_TOOLBAR:
+            case BUTTON_SEGMENTED_TEXTURED_TOOLBAR_ICONS:
                 width += size2D(sz, 0, 0, 0);
                 height += size2D(sz, -1, -2, -1);
                 break;
 
             case BUTTON_SEGMENTED_TEXTURED_SEPARATED:
             case BUTTON_SEGMENTED_TEXTURED_SEPARATED_TOOLBAR:
+            case BUTTON_SEGMENTED_TEXTURED_SEPARATED_TOOLBAR_ICONS:
                 if (pos == Position.ONLY || pos == Position.FIRST) {
                     width -= 0.5;
                 }
@@ -310,6 +316,75 @@ public class BigSurOutliner
         }
 
         return new Rectangle2D.Double(x, y, width, height);
+    }
+
+    @Override
+    protected @Nullable Shape getPopUpButtonOutline(@NotNull Rectangle2D bounds, @NotNull PopupButtonLayoutConfiguration g)
+    {
+        AquaUIPainter.PopupButtonWidget bw = g.getPopupButtonWidget();
+        Size sz = g.getSize();
+
+        if (bw == BUTTON_POP_UP || bw == BUTTON_POP_DOWN) {
+            double x = bounds.getX();
+            double y = bounds.getY();
+            double width = bounds.getWidth();
+            double height = bounds.getHeight();
+
+            double corner = size2D(sz, 12, 10, 8, 8);
+
+            if (bw == BUTTON_POP_DOWN) {
+                x += size2D(sz, 1.5, -0.5, .5, 1.5);
+                width += size2D(sz, -3, 0, -1, -3);
+                y += size2D(sz, 1.5, -0.5, 0.5, 0.5);
+                height += size2D(sz, -2, -1, -2, -2);
+            } else {
+                x += size2D(sz, 2.5, .5, .5, .5);
+                width += size2D(sz, -4, -1, -1, -1);
+                y += size2D(sz, 1, -0.5, 0, 0.5);
+                height += size2D(sz, -2, -1.5, -2, -2);
+            }
+
+            return new RoundRectangle2D.Double(x, y, width, height, corner, corner);
+        }
+
+        return super.getPopUpButtonOutline(bounds, g);
+    }
+
+    @Override
+    protected @Nullable Shape getComboBoxOutline(@NotNull Rectangle2D bounds, @NotNull ComboBoxLayoutConfiguration g)
+    {
+        double x = bounds.getX();
+        double y = bounds.getY();
+        double width = bounds.getWidth();
+        double height = bounds.getHeight();
+
+        ComboBoxWidget widget = g.getWidget();
+        if (widget == ComboBoxWidget.BUTTON_COMBO_BOX) {
+            Size sz = g.getSize();
+            y += size2D(sz, 0.5f, 0.5f, 0.5f);
+            height += size2D(sz, -1, -2, -1);
+            x += size2D(sz, 0, 0, 0);
+            width += size2D(sz, -1, -1, -1);
+            double corner = size2D(sz, 10, 8, 6);
+
+            // TBD: support right to left
+
+            return new GeneralRoundRectangle(x, y, width, height, corner, corner, corner, corner, corner, corner, corner, corner);
+
+        } else if (widget == ComboBoxWidget.BUTTON_COMBO_BOX_CELL) {
+            Insetter insets = uiLayout.getComboBoxEditorInsets(g);
+            return insets.applyToBounds2D(bounds);
+
+        } else if (widget == ComboBoxWidget.BUTTON_COMBO_BOX_TEXTURED || widget == ComboBoxWidget.BUTTON_COMBO_BOX_TEXTURED_TOOLBAR) {
+            x += 0.5f;
+            width -= 1;
+            height -= 1;
+            double corner = 8;
+            return new GeneralRoundRectangle(x, y, width, height, corner, corner, corner, corner, corner, corner, corner, corner);
+
+        } else {
+            return null;
+        }
     }
 
     @Override

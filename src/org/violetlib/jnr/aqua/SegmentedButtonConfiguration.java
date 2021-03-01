@@ -80,7 +80,6 @@ public class SegmentedButtonConfiguration
           SwitchTracking.SELECT_ONE);
     }
 
-
     public SegmentedButtonConfiguration(@NotNull SegmentedButtonWidget bw,
                                         @NotNull Size size,
                                         @NotNull State state,
@@ -120,7 +119,7 @@ public class SegmentedButtonConfiguration
                                         @NotNull DividerState rightDividerState)
     {
         this(g.getWidget(), g.getSize(), state, isSelected, isFocused, d, g.getPosition(),
-          leftDividerState, rightDividerState);
+          leftDividerState, rightDividerState, SwitchTracking.SELECT_ONE);
     }
 
     public SegmentedButtonConfiguration(@NotNull SegmentedButtonLayoutConfiguration g,
@@ -204,7 +203,8 @@ public class SegmentedButtonConfiguration
                  && d == that.d
                  && leftDividerState == that.leftDividerState
                  && rightDividerState == that.rightDividerState
-                 && tracking == that.tracking;
+                 && tracking == that.tracking
+                 && super.layoutEquals(that);
     }
 
     @Override
@@ -228,13 +228,13 @@ public class SegmentedButtonConfiguration
     {
         int platformVersion = JNRPlatformUtils.getPlatformVersion();
 
-        // Starting with macOS 10.15, textured buttons are not sensitive
-        if (platformVersion >= 101500 && bw.isTextured()) {
+        // Starting with macOS 10.15, textured buttons are not sensitive unless they are on the toolbar
+        if (platformVersion >= 101500 && bw.isTextured() && !bw.isToolbar()) {
             return false;
         }
 
         // Starting with macOS 11, tab buttons are not sensitive
-        if (platformVersion >= 101600 && bw == SegmentedButtonWidget.BUTTON_TAB) {
+        if (platformVersion >= 101600 && bw.isSlider() && !bw.isToolbar()) {
             return false;
         }
 

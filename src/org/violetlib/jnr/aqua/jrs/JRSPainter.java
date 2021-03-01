@@ -15,6 +15,7 @@ import org.violetlib.jnr.LayoutInfo;
 import org.violetlib.jnr.Painter;
 import org.violetlib.jnr.aqua.*;
 import org.violetlib.jnr.aqua.impl.AquaUIPainterBase;
+import org.violetlib.jnr.aqua.impl.FromMaskOperator;
 import org.violetlib.jnr.aqua.impl.LinearSliderRenderer;
 import org.violetlib.jnr.aqua.impl.PopupRenderer;
 import org.violetlib.jnr.aqua.impl.SliderTickConfiguration;
@@ -248,6 +249,7 @@ public class JRSPainter
                 break;
             case BUTTON_TEXTURED:
             case BUTTON_TEXTURED_TOOLBAR:  // not supported
+            case BUTTON_TEXTURED_TOOLBAR_ICONS:  // not supported
                 maker.set(JRSUIConstants.Widget.BUTTON_PUSH_TEXTURED);
                 break;
             case BUTTON_ROUND:
@@ -257,7 +259,7 @@ public class JRSPainter
                 maker.set(JRSUIConstants.Widget.BUTTON_ROUND_INSET);
                 break;
             case BUTTON_ROUND_TEXTURED:
-            case BUTTON_ROUND_TOOLBAR:
+            case BUTTON_ROUND_TEXTURED_TOOLBAR:
                 throw new UnsupportedOperationException();
             case BUTTON_DISCLOSURE_TRIANGLE:
                 maker.set(JRSUIConstants.Widget.DISCLOSURE_TRIANGLE);
@@ -319,10 +321,14 @@ public class JRSPainter
 
         } else if (bw == ButtonWidget.BUTTON_DISCLOSURE) {
             maker.set(bs == ButtonState.OFF ? JRSUIConstants.Direction.DOWN : JRSUIConstants.Direction.UP);
-        } else if (bw == ButtonWidget.BUTTON_CHECK_BOX || bw == ButtonWidget.BUTTON_RADIO
-                     || bw == ButtonWidget.BUTTON_BEVEL || bw == ButtonWidget.BUTTON_BEVEL_ROUND
+        } else if (bw == ButtonWidget.BUTTON_CHECK_BOX
+                     || bw == ButtonWidget.BUTTON_RADIO
+                     || bw == ButtonWidget.BUTTON_BEVEL
+                     || bw == ButtonWidget.BUTTON_BEVEL_ROUND
                      || bw == ButtonWidget.BUTTON_GRADIENT
-                     || bw == ButtonWidget.BUTTON_TEXTURED || bw == ButtonWidget.BUTTON_TEXTURED_TOOLBAR
+                     || bw == ButtonWidget.BUTTON_TEXTURED
+                     || bw == ButtonWidget.BUTTON_TEXTURED_TOOLBAR
+                     || bw == ButtonWidget.BUTTON_TEXTURED_TOOLBAR_ICONS
                      || bw == ButtonWidget.BUTTON_ROUND) {
             switch (bs) {
                 case ON:
@@ -651,6 +657,8 @@ public class JRSPainter
         switch (bw) {
             case BUTTON_TAB:
             case BUTTON_SEGMENTED_SLIDER:
+            case BUTTON_SEGMENTED_SLIDER_TOOLBAR:
+            case BUTTON_SEGMENTED_SLIDER_TOOLBAR_ICONS:
                 maker.set(JRSUIConstants.Widget.TAB);
                 break;
             case BUTTON_SEGMENTED:
@@ -670,6 +678,7 @@ public class JRSPainter
                 break;
             case BUTTON_SEGMENTED_TEXTURED:
             case BUTTON_SEGMENTED_TEXTURED_TOOLBAR:  // not supported
+            case BUTTON_SEGMENTED_TEXTURED_TOOLBAR_ICONS:  // not supported
                 maker.set(JRSUIConstants.Widget.BUTTON_SEGMENTED_TEXTURED);
                 break;
             case BUTTON_SEGMENTED_TOOLBAR:
@@ -680,6 +689,7 @@ public class JRSPainter
                 break;
             case BUTTON_SEGMENTED_TEXTURED_SEPARATED:
             case BUTTON_SEGMENTED_TEXTURED_SEPARATED_TOOLBAR:
+            case BUTTON_SEGMENTED_TEXTURED_SEPARATED_TOOLBAR_ICONS:
                 // not supported
                 // an attempted workaround, must coordinate with renderer description
                 pos = Position.ONLY;
@@ -1065,16 +1075,18 @@ public class JRSPainter
         Insetter thumbInsets = uiLayout.getSliderThumbPaintingInsets(g, g.getValue());
         Insetter tickMarkInsets = trackInsets;
         boolean isThumbTranslucent = appearance != null && appearance.isDark();
+        ReusableCompositor.PixelOperator tickOperator = null;
 
         // The interpretation of thumb painting insets changed for the new linear slider style.
         // The use of a tick mark renderer was introduced for the new linear slider style.
 
         if (style == SLIDER_11_0) {
             thumbInsets = trackInsets.prepend(thumbInsets);
+            tickOperator = new FromMaskOperator(appearance);
         }
 
         return new LinearSliderRenderer(g, trackRenderer, trackInsets, tickMarkRenderer, tickMarkInsets,
-          thumbRenderer, thumbInsets, isThumbTranslucent);
+          thumbRenderer, thumbInsets, isThumbTranslucent, tickOperator);
     }
 
     protected @Nullable Renderer getSliderTickMarkRenderer(@NotNull SliderConfiguration g)

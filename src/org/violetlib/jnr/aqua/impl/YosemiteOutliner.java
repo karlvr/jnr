@@ -87,7 +87,7 @@ public class YosemiteOutliner
               || bw == BUTTON_ROUND
               || bw == BUTTON_ROUND_INSET
               || bw == BUTTON_ROUND_TEXTURED
-              || bw == BUTTON_ROUND_TOOLBAR) {
+              || bw == BUTTON_ROUND_TEXTURED_TOOLBAR) {
 
             switch (bw)
             {
@@ -152,7 +152,7 @@ public class YosemiteOutliner
             corner = 16;
         } else if (bw == BUTTON_RECESSED) {
             corner = 6;
-        } else if (bw == BUTTON_TEXTURED || bw == BUTTON_TEXTURED_TOOLBAR) {
+        } else if (bw == BUTTON_TEXTURED || bw == BUTTON_TEXTURED_TOOLBAR || bw == BUTTON_TEXTURED_TOOLBAR_ICONS) {
             corner = 6;
             height -= 0.5;
         } else if (bw == BUTTON_DISCLOSURE_TRIANGLE) {
@@ -192,6 +192,8 @@ public class YosemiteOutliner
             case BUTTON_SEGMENTED:
             case BUTTON_SEGMENTED_SEPARATED:
             case BUTTON_SEGMENTED_SLIDER:
+            case BUTTON_SEGMENTED_SLIDER_TOOLBAR:
+            case BUTTON_SEGMENTED_SLIDER_TOOLBAR_ICONS:
                 corner = 6;
 
                 x += size2D(sz, isLeft ? 0.5f : 0, 0, 0);
@@ -224,12 +226,14 @@ public class YosemiteOutliner
                 break;
 
             case BUTTON_SEGMENTED_TEXTURED_TOOLBAR:
+            case BUTTON_SEGMENTED_TEXTURED_TOOLBAR_ICONS:
                 width += size2D(sz, 0, 0, 0);
                 height += size2D(sz, -1, -2, -1);
                 break;
 
             case BUTTON_SEGMENTED_TEXTURED_SEPARATED:
             case BUTTON_SEGMENTED_TEXTURED_SEPARATED_TOOLBAR:
+            case BUTTON_SEGMENTED_TEXTURED_SEPARATED_TOOLBAR_ICONS:
                 if (pos == Position.ONLY || pos == Position.FIRST) {
                     width -= 0.5;
                 }
@@ -365,7 +369,7 @@ public class YosemiteOutliner
             if (bw == BUTTON_POP_DOWN) {
                 height += size2D(sz, -2, -2, -2);
                 y += size2D(sz, 0.5f, 0.5f, 0.5f);
-            } else if (bw == BUTTON_POP_UP){
+            } else if (bw == BUTTON_POP_UP) {
                 height += size2D(sz, -2, -2, -2);
                 y += size2D(sz, 0, 0, 0.5f);
             } else if (bw == BUTTON_POP_UP_BEVEL || bw == BUTTON_POP_DOWN_BEVEL) {

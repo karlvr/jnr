@@ -12,11 +12,18 @@ import java.awt.geom.Rectangle2D;
 
 import org.violetlib.jnr.Insetter;
 import org.violetlib.jnr.LayoutInfo;
-import org.violetlib.jnr.aqua.AquaUIPainter;
+import org.violetlib.jnr.aqua.AquaUIPainter.ButtonWidget;
+import org.violetlib.jnr.aqua.AquaUIPainter.Orientation;
 import org.violetlib.jnr.aqua.AquaUIPainter.PopupButtonWidget;
+import org.violetlib.jnr.aqua.AquaUIPainter.Position;
+import org.violetlib.jnr.aqua.AquaUIPainter.ProgressWidget;
+import org.violetlib.jnr.aqua.AquaUIPainter.SegmentedButtonWidget;
+import org.violetlib.jnr.aqua.AquaUIPainter.Size;
 import org.violetlib.jnr.aqua.AquaUIPainter.SliderWidget;
+import org.violetlib.jnr.aqua.AquaUIPainter.TextFieldWidget;
 import org.violetlib.jnr.aqua.ButtonLayoutConfiguration;
 import org.violetlib.jnr.aqua.PopupButtonLayoutConfiguration;
+import org.violetlib.jnr.aqua.ProgressIndicatorLayoutConfiguration;
 import org.violetlib.jnr.aqua.SegmentedButtonLayoutConfiguration;
 import org.violetlib.jnr.aqua.SliderLayoutConfiguration;
 import org.violetlib.jnr.aqua.TextFieldLayoutConfiguration;
@@ -32,6 +39,7 @@ import org.violetlib.jnr.impl.JNRUtils;
 
 import org.jetbrains.annotations.*;
 
+import static org.violetlib.jnr.aqua.AquaUIPainter.ButtonWidget.*;
 import static org.violetlib.jnr.aqua.AquaUIPainter.PopupButtonWidget.*;
 import static org.violetlib.jnr.impl.JNRUtils.*;
 
@@ -49,76 +57,76 @@ public class BigSurLayoutInfo
     @Override
     protected @NotNull LayoutInfo getButtonLayoutInfo(@NotNull ButtonLayoutConfiguration g)
     {
-        AquaUIPainter.ButtonWidget bw = g.getButtonWidget();
+        ButtonWidget bw = g.getButtonWidget();
 
-        if (bw == AquaUIPainter.ButtonWidget.BUTTON_TOOLBAR_ITEM) {
+        if (bw == BUTTON_TOOLBAR_ITEM) {
             ToolBarItemWellLayoutConfiguration tg = new ToolBarItemWellLayoutConfiguration();
             return getToolBarItemWellLayoutInfo(tg);
         }
 
-        AquaUIPainter.Size sz = g.getSize();
+        Size sz = g.getSize();
 
-        if (bw == AquaUIPainter.ButtonWidget.BUTTON_PUSH) {
+        if (bw == BUTTON_PUSH) {
             // AppKit layout heights are 40, 32, 27, 16
             // The following are visual heights
-            return BasicLayoutInfo.createFixedHeight(size(sz, 31, 23, 18, 14));
+            return BasicLayoutInfo.createFixedHeight(size(sz, 31, 23, 19, 16));
 
-        } else if (bw == AquaUIPainter.ButtonWidget.BUTTON_BEVEL) {
+        } else if (bw == BUTTON_BEVEL) {
             return BasicLayoutInfo.getInstance();
 
-        } else if (bw == AquaUIPainter.ButtonWidget.BUTTON_BEVEL_ROUND) {
+        } else if (bw == BUTTON_BEVEL_ROUND) {
             return BasicLayoutInfo.getInstance();
 
-        } else if (bw == AquaUIPainter.ButtonWidget.BUTTON_CHECK_BOX) {
+        } else if (bw == BUTTON_CHECK_BOX) {
             return BasicLayoutInfo.createFixed(size(sz, 20, 18, 14, 10), size(sz, 20, 18, 15, 11));
 
-        } else if (bw == AquaUIPainter.ButtonWidget.BUTTON_RADIO) {
+        } else if (bw == BUTTON_RADIO) {
             return BasicLayoutInfo.createFixed(size(sz, 20, 18, 14, 10), size(sz, 20, 18, 15, 10));
 
-        } else if (bw == AquaUIPainter.ButtonWidget.BUTTON_DISCLOSURE) {
+        } else if (bw == BUTTON_DISCLOSURE) {
             return BasicLayoutInfo.createFixed(size(sz, 30, 28, 28, 19), size(sz, 30, 26, 26, 16));
 
-        } else if (bw == AquaUIPainter.ButtonWidget.BUTTON_HELP) {
+        } else if (bw == BUTTON_HELP) {
             return BasicLayoutInfo.createFixed(size(sz, 35, 25, 18, 16), size(sz, 35, 25, 19, 17));
 
-        } else if (bw == AquaUIPainter.ButtonWidget.BUTTON_GRADIENT) {
+        } else if (bw == BUTTON_GRADIENT) {
             return BasicLayoutInfo.getInstance();
 
-        } else if (bw == AquaUIPainter.ButtonWidget.BUTTON_RECESSED) {
+        } else if (bw == BUTTON_RECESSED) {
             return BasicLayoutInfo.createFixedHeight(size(sz, 19, 19, 17, 15));
 
-        } else if (bw == AquaUIPainter.ButtonWidget.BUTTON_INLINE) {
+        } else if (bw == BUTTON_INLINE) {
             // Note that the NSView does not limit the size, but there seems to be an intended fixed size.
             return BasicLayoutInfo.createFixedHeight(16);
 
-        } else if (bw == AquaUIPainter.ButtonWidget.BUTTON_ROUNDED_RECT) {
+        } else if (bw == BUTTON_ROUNDED_RECT) {
             return BasicLayoutInfo.createFixedHeight(size(sz, 19, 19, 17, 15));
 
-        } else if (bw == AquaUIPainter.ButtonWidget.BUTTON_TEXTURED) {
+        } else if (bw == BUTTON_TEXTURED) {
             return BasicLayoutInfo.createFixedHeight(size(sz, 25, 23, 19, 16));
 
-        } else if (bw == AquaUIPainter.ButtonWidget.BUTTON_TEXTURED_TOOLBAR) {
-            return BasicLayoutInfo.createFixedHeight(size(sz, 25, 24, 19, 16));
+        } else if (bw == BUTTON_TEXTURED_TOOLBAR || bw == BUTTON_TEXTURED_TOOLBAR_ICONS) {
+            return BasicLayoutInfo.createFixedHeight(size(sz, 27, 24, 19, 16));
 
-        } else if (bw == AquaUIPainter.ButtonWidget.BUTTON_ROUND || bw == AquaUIPainter.ButtonWidget.BUTTON_ROUND_TOOLBAR) {
+        } else if (bw == BUTTON_ROUND) {
             return BasicLayoutInfo.createFixed(size(sz, 34, 26, 22, 19), size(sz, 34, 26, 22, 19));
 
-        } else if (bw == AquaUIPainter.ButtonWidget.BUTTON_ROUND_INSET) {
+        } else if (bw == BUTTON_ROUND_INSET) {
             return BasicLayoutInfo.createFixed(18, 18);
 
-        } else if (bw == AquaUIPainter.ButtonWidget.BUTTON_ROUND_TEXTURED) {
+        } else if (bw == BUTTON_ROUND_TEXTURED) {
             return BasicLayoutInfo.createFixed(size(sz, 21, 18, 15), size(sz, 22, 19, 16));
 
-//        } else if (bw == AquaUIPainter.ButtonWidget.BUTTON_ROUND_TOOLBAR) {
-//            return BasicLayoutInfo.createFixed(size(sz, 26, 23, 20, 17), size(sz, 26, 23, 20, 17));
+        } else if (bw == BUTTON_ROUND_TEXTURED_TOOLBAR) {
+            return BasicLayoutInfo.createFixed(28, 28);
 
-        } else if (bw == AquaUIPainter.ButtonWidget.BUTTON_DISCLOSURE_TRIANGLE) {
+        } else if (bw == BUTTON_DISCLOSURE_TRIANGLE) {
             return BasicLayoutInfo.createFixed(13, 13);
 
-        } else if (bw == AquaUIPainter.ButtonWidget.BUTTON_PUSH_INSET2) {
+        } else if (bw == BUTTON_PUSH_INSET2) {
             return BasicLayoutInfo.createFixedHeight(size(sz, 19, 17, 15));
 
-        } else if (bw == AquaUIPainter.ButtonWidget.BUTTON_COLOR_WELL) {
+        } else if (bw == BUTTON_COLOR_WELL) {
             return BasicLayoutInfo.createMinimum(44, 23);
 
         } else {
@@ -129,22 +137,15 @@ public class BigSurLayoutInfo
     @Override
     protected @NotNull LayoutInfo getSegmentedButtonLayoutInfo(@NotNull SegmentedButtonLayoutConfiguration g)
     {
-        AquaUIPainter.SegmentedButtonWidget bw = g.getWidget();
-        AquaUIPainter.Size sz = g.getSize();
-        boolean isSolo = g.getPosition() == AquaUIPainter.Position.ONLY;
+        SegmentedButtonWidget bw = g.getWidget();
+        Size sz = g.getSize();
 
         switch (bw) {
             case BUTTON_TAB:
             case BUTTON_SEGMENTED:
             case BUTTON_SEGMENTED_SLIDER:
-                if (isSolo) {
-                    // Appears to be using the separated style
-                    return BasicLayoutInfo.createFixedHeight(size(sz, 31, 23, 19, 16));
-                }
-                return BasicLayoutInfo.createFixedHeight(size(sz, 30, 22, 18, 15));
-
             case BUTTON_SEGMENTED_SEPARATED:
-                return BasicLayoutInfo.createFixedHeight(size(sz, 31, 23, 19, 16));
+                return BasicLayoutInfo.createFixedHeight(size(sz, 32, 24, 20, 16));
 
             case BUTTON_SEGMENTED_INSET:
                 return BasicLayoutInfo.createFixedHeight(size(sz, 18, 16, 14));
@@ -153,12 +154,20 @@ public class BigSurLayoutInfo
                 return BasicLayoutInfo.createFixedHeight(size(sz, 21, 19, 17));
 
             case BUTTON_SEGMENTED_TEXTURED:
-            case BUTTON_SEGMENTED_TEXTURED_TOOLBAR:
             case BUTTON_SEGMENTED_SCURVE:
+                return BasicLayoutInfo.createFixedHeight(size(sz, 21, 16, 13));
+
             case BUTTON_SEGMENTED_TOOLBAR:
+            case BUTTON_SEGMENTED_TEXTURED_TOOLBAR:
+            case BUTTON_SEGMENTED_TEXTURED_TOOLBAR_ICONS:
             case BUTTON_SEGMENTED_TEXTURED_SEPARATED:
+                return BasicLayoutInfo.createFixedHeight(size(sz, 28, 22, 17, 15));
+
+            case BUTTON_SEGMENTED_SLIDER_TOOLBAR:
+            case BUTTON_SEGMENTED_SLIDER_TOOLBAR_ICONS:
             case BUTTON_SEGMENTED_TEXTURED_SEPARATED_TOOLBAR:
-                return BasicLayoutInfo.createFixedHeight(size(sz, 20, 16, 13));
+            case BUTTON_SEGMENTED_TEXTURED_SEPARATED_TOOLBAR_ICONS:
+                return BasicLayoutInfo.createFixedHeight(size(sz, 29, 23, 19, 16));
 
             default:
                 throw new UnsupportedOperationException();
@@ -166,24 +175,70 @@ public class BigSurLayoutInfo
     }
 
     @Override
+    public @NotNull Insetter getSegmentedButtonLabelInsets(@NotNull SegmentedButtonLayoutConfiguration g)
+    {
+        SegmentedButtonWidget bw = g.getWidget();
+        LayoutInfo layoutInfo = getLayoutInfo(g);
+        Size sz = g.getSize();
+
+        if (bw == SegmentedButtonWidget.BUTTON_SEGMENTED_SEPARATED) {
+            float left = size2D(sz, 2, 2, 1.5);
+            float right = size2D(sz, 3, 3, 2.5);
+            float top = size2D(sz, 3, 3.5, 3.5);
+            float bottom = size2D(sz, 1, 0.5, 0);
+            Position pos = g.getPosition();
+            boolean isLeftEnd = pos == Position.FIRST || pos == Position.ONLY;
+            boolean isRightEnd = pos == Position.LAST || pos == Position.ONLY;
+            float endAdjust = 2;
+            if (isLeftEnd) {
+                left += endAdjust;
+            }
+            if (isRightEnd) {
+                right += endAdjust;
+            }
+            return Insetters.createFixed(top, left, bottom, right, layoutInfo);
+        }
+        return super.getSegmentedButtonLabelInsets(g);
+    }
+
+    @Override
+    protected @NotNull LayoutInfo getPopUpButtonLayoutInfo(@NotNull PopupButtonLayoutConfiguration g)
+    {
+        PopupButtonWidget bw = g.getPopupButtonWidget();
+        Size sz = g.getSize();
+
+        switch (bw) {
+            case BUTTON_POP_UP:
+            case BUTTON_POP_DOWN: {
+                float fixedHeight = size(sz, 31, 22, 19, 16);
+                float minWidth = size(sz, 44, 25, 24, 20);
+                return BasicLayoutInfo.create(false, minWidth, true, fixedHeight);
+            }
+        }
+
+        return super.getPopUpButtonLayoutInfo(g);
+    }
+
+    @Override
     public @NotNull Insetter getPopupButtonContentInsets(@NotNull PopupButtonLayoutConfiguration g)
     {
         PopupButtonWidget bw = g.getPopupButtonWidget();
         if (bw == BUTTON_POP_UP || bw == BUTTON_POP_DOWN) {
-            AquaUIPainter.Size sz = g.getSize();
+            Size sz = g.getSize();
             float top = 1;
             float bottom = 1;
             float far = 3;
-            float near = size2D(sz, 21, 17, 14);
+            float near = size2D(sz, 28, 21, 17, 14);
 
             switch (bw) {
                 case BUTTON_POP_UP:
                 default:
-                    bottom = size2D(sz, 2.5f, 2.5f, 2);
-                    top = size2D(sz, 0.5f, 0.5f, 1);
+                    bottom = size2D(sz, 3, 2.5, 2.5, 2);
+                    top = size2D(sz, 3, 0.5, 0.5, 1);
                     break;
                 case BUTTON_POP_DOWN:
-                    bottom = 2;
+                    bottom = size2D(sz, 2, 2.5, 2, 2);
+                    top = size2D(sz, 3, 0, 0, 0);
                     break;
             }
             LayoutInfo layoutInfo = getLayoutInfo(g);
@@ -195,16 +250,33 @@ public class BigSurLayoutInfo
     }
 
     @Override
+    protected @NotNull LayoutInfo getProgressIndicatorLayoutInfo(@NotNull ProgressIndicatorLayoutConfiguration g)
+    {
+        ProgressWidget pw = g.getWidget();
+        Orientation o = g.getOrientation();
+        Size sz = g.getSize();
+
+        if (pw == ProgressWidget.BAR || pw == ProgressWidget.INDETERMINATE_BAR) {
+            int size = size(sz, 6, 3, 3);
+            if (o == Orientation.HORIZONTAL) {
+                return BasicLayoutInfo.createFixedHeight(size);
+            } else {
+                return BasicLayoutInfo.createFixedWidth(size);
+            }
+        } else if (pw == ProgressWidget.SPINNER || pw == ProgressWidget.INDETERMINATE_SPINNER) {
+            int d = size(sz, 32, 16, 12);
+            return BasicLayoutInfo.createFixed(d, d);
+        } else {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    @Override
     protected @NotNull LayoutInfo getTextFieldLayoutInfo(@NotNull TextFieldLayoutConfiguration g)
     {
-        AquaUIPainter.TextFieldWidget w = g.getWidget();
+        TextFieldWidget w = g.getWidget();
         if (w.isRound() || w.isSearch()) {
-            if (w.isToolbar()) {
-                // The actual sizes for small and mini are bogus. We do not simulate this bug.
-                return BasicLayoutInfo.createFixedHeight(size(g.getSize(), 30, 30, 20, 17));
-            } else {
-                return BasicLayoutInfo.createFixedHeight(size(g.getSize(), 30, 22, 19, 17));
-            }
+            return BasicLayoutInfo.createFixedHeight(size(g.getSize(), 28, 22, 19, 17));
         }
 
         return BasicLayoutInfo.getInstance();
@@ -224,7 +296,7 @@ public class BigSurLayoutInfo
     }
 
     @Override
-    protected double getSliderExtension(@NotNull AquaUIPainter.Size sz)
+    protected double getSliderExtension(@NotNull Size sz)
     {
         switch (sz)
         {
@@ -239,7 +311,7 @@ public class BigSurLayoutInfo
 
     private @NotNull LayoutInfo getLinearSlider11LayoutInfo(@NotNull SliderLayoutConfiguration g)
     {
-        AquaUIPainter.Size sz = g.getSize();
+        Size sz = g.getSize();
 
         // These numbers are tentative.
 
@@ -267,7 +339,7 @@ public class BigSurLayoutInfo
 
     private @NotNull Insetter getSlider11TrackPaintingInsets(@NotNull SliderLayoutConfiguration g)
     {
-        AquaUIPainter.Size sz = g.getSize();
+        Size sz = g.getSize();
         float trackWidth = JNRUtils.size(sz, 4, 4, 3);
         float majorInset = JNRUtils.size(sz, 10, 8, 6);
         boolean isCircle = !g.hasTickMarks();
@@ -308,7 +380,7 @@ public class BigSurLayoutInfo
     {
         // The outline size may be smaller because it excludes a shadow.
 
-        AquaUIPainter.Size sz = g.getSize();
+        Size sz = g.getSize();
         if (g.hasTickMarks()) {
             float width;
             float height;
@@ -420,7 +492,7 @@ public class BigSurLayoutInfo
                                           double thumbPosition)
     {
         SliderWidget sw = g.getWidget();
-        AquaUIPainter.Size sz = g.getSize();
+        Size sz = g.getSize();
 
         double left = bounds.getX();
         double top = bounds.getY();

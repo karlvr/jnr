@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Alan Snyder.
+ * Copyright (c) 2015-2020 Alan Snyder.
  * All rights reserved.
  *
  * You may not use, copy or modify this file, except in compliance with the license agreement. For details see
@@ -128,7 +128,11 @@ public class ImageAnalyzer
 
     private static boolean isTransparent(int pixel)
     {
-        int alpha = (pixel >> 24) & 0xFF;
-        return alpha == 0;
+        return alpha(pixel) == 0;
+    }
+
+    public static int alpha(int pixel)
+    {
+        return (pixel >> 24) & 0xff;
     }
 }

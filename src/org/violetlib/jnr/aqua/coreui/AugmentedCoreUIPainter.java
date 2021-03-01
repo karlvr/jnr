@@ -23,6 +23,7 @@ import org.violetlib.jnr.aqua.impl.LinearSliderPainterExtension;
 import org.violetlib.jnr.aqua.impl.OverlayScrollBarPainterExtension;
 import org.violetlib.jnr.aqua.impl.PopUpArrowPainter;
 import org.violetlib.jnr.aqua.impl.PullDownArrowPainter;
+import org.violetlib.jnr.aqua.impl.RoundToolbarButtonPainterExtension;
 import org.violetlib.jnr.aqua.impl.TableColumnHeaderCellPainterExtension;
 import org.violetlib.jnr.aqua.impl.ThinSplitPaneDividerPainterExtension;
 import org.violetlib.jnr.impl.AdjustDarkToolbarButtonRenderer;
@@ -96,7 +97,13 @@ public class AugmentedCoreUIPainter
         if (g.getButtonWidget() == ButtonWidget.BUTTON_COLOR_WELL) {
             return new ColorWellRenderer(g, r);
         }
-
+        if (g.getButtonWidget() == ButtonWidget.BUTTON_ROUND_TEXTURED_TOOLBAR) {
+            int platformVersion = JNRPlatformUtils.getPlatformVersion();
+            if (platformVersion >= 101600) {
+                PainterExtension px = new RoundToolbarButtonPainterExtension(g, appearance);
+                return Renderer.create(px);
+            }
+        }
         return r;
     }
 
@@ -105,14 +112,21 @@ public class AugmentedCoreUIPainter
     {
         Renderer r = super.getComboBoxButtonRenderer(g);
 
-        // workaround for incorrect colors in dark mode for buttons on the toolbar
-        if (appearance != null && appearance.isDark()) {
-            ComboBoxWidget w = g.getWidget();
-            if (w == ComboBoxWidget.BUTTON_COMBO_BOX_TEXTURED_TOOLBAR) {
-                BasicRenderer br = r.getBasicRenderer();
-                assert br != null;
-                AdjustDarkToolbarButtonRenderer rr = new AdjustDarkToolbarButtonRenderer(br);
-                r = Renderer.create(rr, r.getRendererDescription());
+        // Workaround for incorrect colors in dark mode for buttons on the toolbar. Not sure when this was needed,
+        // but it is not needed in latest release of 10.14+.
+
+        if (false) {
+            int platformVersion = JNRPlatformUtils.getPlatformVersion();
+            if (platformVersion < 101500) {
+                if (appearance != null && appearance.isDark()) {
+                    ComboBoxWidget w = g.getWidget();
+                    if (w == ComboBoxWidget.BUTTON_COMBO_BOX_TEXTURED_TOOLBAR) {
+                        BasicRenderer br = r.getBasicRenderer();
+                        assert br != null;
+                        AdjustDarkToolbarButtonRenderer rr = new AdjustDarkToolbarButtonRenderer(br);
+                        r = Renderer.create(rr, r.getRendererDescription());
+                    }
+                }
             }
         }
 
@@ -124,14 +138,21 @@ public class AugmentedCoreUIPainter
     {
         Renderer r = super.getBasicPopupButtonRenderer(g);
 
-        // workaround for incorrect colors in dark mode for buttons on the toolbar
-        if (r != null && appearance != null && appearance.isDark()) {
-            PopupButtonWidget w = g.getPopupButtonWidget();
-            if (w == BUTTON_POP_DOWN_TEXTURED_TOOLBAR || w == BUTTON_POP_UP_TEXTURED_TOOLBAR) {
-                BasicRenderer br = r.getBasicRenderer();
-                assert br != null;
-                AdjustDarkToolbarButtonRenderer rr = new AdjustDarkToolbarButtonRenderer(br);
-                r = Renderer.create(rr, r.getRendererDescription());
+        // Workaround for incorrect colors in dark mode for buttons on the toolbar. Not sure when this was needed,
+        // but it is not needed in latest release of 10.14+.
+
+        if (false) {
+            int platformVersion = JNRPlatformUtils.getPlatformVersion();
+            if (platformVersion < 101500) {
+                if (r != null && appearance != null && appearance.isDark()) {
+                    PopupButtonWidget w = g.getPopupButtonWidget();
+                    if (w == BUTTON_POP_DOWN_TEXTURED_TOOLBAR || w == BUTTON_POP_UP_TEXTURED_TOOLBAR) {
+                        BasicRenderer br = r.getBasicRenderer();
+                        assert br != null;
+                        AdjustDarkToolbarButtonRenderer rr = new AdjustDarkToolbarButtonRenderer(br);
+                        r = Renderer.create(rr, r.getRendererDescription());
+                    }
+                }
             }
         }
 
@@ -143,14 +164,21 @@ public class AugmentedCoreUIPainter
     {
         Renderer r = super.getSegmentedButtonRenderer(g);
 
-        if (appearance != null && appearance.isDark()) {
-            SegmentedButtonWidget w = g.getWidget();
-            if (w == BUTTON_SEGMENTED_TEXTURED_TOOLBAR || w == BUTTON_SEGMENTED_TEXTURED_SEPARATED_TOOLBAR) {
-                // workaround for incorrect colors in dark mode for buttons on the toolbar
-                BasicRenderer br = r.getBasicRenderer();
-                assert br != null;
-                AdjustDarkToolbarButtonRenderer rr = new AdjustDarkToolbarButtonRenderer(br);
-                r = Renderer.create(rr, r.getRendererDescription());
+        // Workaround for incorrect colors in dark mode for buttons on the toolbar. Not sure when this was needed,
+        // but it is not needed in latest release of 10.14+.
+
+        if (false) {
+            int platformVersion = JNRPlatformUtils.getPlatformVersion();
+            if (platformVersion < 101500) {
+                if (appearance != null && appearance.isDark()) {
+                    SegmentedButtonWidget w = g.getWidget();
+                    if (w.isTextured() && w.isToolbar()) {
+                        BasicRenderer br = r.getBasicRenderer();
+                        assert br != null;
+                        AdjustDarkToolbarButtonRenderer rr = new AdjustDarkToolbarButtonRenderer(br);
+                        r = Renderer.create(rr, r.getRendererDescription());
+                    }
+                }
             }
         }
 

@@ -102,9 +102,22 @@ public class HybridAquaUIPainter
             }
         } else if (g instanceof SegmentedButtonConfiguration) {
             SegmentedButtonConfiguration sg = (SegmentedButtonConfiguration) g;
+            SegmentedButtonWidget w = sg.getWidget();
+            int platformVersion = JNRPlatformUtils.getPlatformVersion();
             // The NSView painter produces more accurate backgrounds for gradient buttons
-            if (sg.getWidget() == SegmentedButtonWidget.BUTTON_SEGMENTED_SMALL_SQUARE) {
+            if (w == SegmentedButtonWidget.BUTTON_SEGMENTED_SMALL_SQUARE) {
                 return viewPainter;
+            }
+            if (platformVersion < 101300) {
+                  if (w == SegmentedButtonWidget.BUTTON_SEGMENTED_SEPARATED
+                     || w == SegmentedButtonWidget.BUTTON_SEGMENTED_TEXTURED
+                     || w == SegmentedButtonWidget.BUTTON_SEGMENTED_SCURVE) {
+                      return viewPainter;
+                  }
+            } else if (platformVersion < 101400) {
+                if (w == SegmentedButtonWidget.BUTTON_SEGMENTED_SEPARATED) {
+                    return viewPainter;
+                }
             }
             return coreUIPainter;
         } else if (g instanceof GradientConfiguration) {
@@ -149,6 +162,10 @@ public class HybridAquaUIPainter
             return coreUIPainter;
         } else if (g instanceof IndeterminateProgressIndicatorConfiguration) {
             IndeterminateProgressIndicatorConfiguration bg = (IndeterminateProgressIndicatorConfiguration) g;
+            int platformVersion = JNRPlatformUtils.getPlatformVersion();
+            if (platformVersion >= 101600 && bg.getWidget() == ProgressWidget.INDETERMINATE_BAR) {
+                return viewPainter;
+            }
             return coreUIPainter;
         } else if (g instanceof TextFieldConfiguration) {
             TextFieldConfiguration bg = (TextFieldConfiguration) g;
@@ -159,7 +176,10 @@ public class HybridAquaUIPainter
         } else if (g instanceof SliderConfiguration) {
             SliderConfiguration bg = (SliderConfiguration) g;
             if (bg.getSize() == Size.MINI) {
-                return viewPainter;
+                int platformVersion = JNRPlatformUtils.getPlatformVersion();
+                if (platformVersion < 101500) {
+                    return viewPainter;
+                }
             }
             return coreUIPainter;
         } else if (g instanceof TitleBarConfiguration) {
