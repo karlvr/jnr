@@ -7,21 +7,23 @@
 
     <!-- A Java 9 or later compiler is required -->
 
-    <exec executable="java_home" outputproperty="jdk">
+    <!-- <exec executable="java_home" outputproperty="jdk">
         <arg value="-F"/>
         <arg value="-v"/>
         <arg value="9+"/>
-    </exec>
+    </exec> -->
+    <property name="jdk" value="/Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home" />
 
     <property name="javac" value="${jdk}/bin/javac"/>
 
     <!-- A Java 8 boot class path is required -->
 
-    <exec executable="java_home" outputproperty="jdk8">
+    <!-- <exec executable="java_home" outputproperty="jdk8">
         <arg value="-F"/>
         <arg value="-v"/>
         <arg value="1.8"/>
-    </exec>
+    </exec> -->
+    <property name="jdk8" value="/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home" />
 
     <property name="bootclasspath" value="${jdk8}/jre/lib/rt.jar" />
 
