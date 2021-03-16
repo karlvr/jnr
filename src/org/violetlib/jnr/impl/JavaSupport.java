@@ -12,6 +12,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.StringTokenizer;
+import java.util.logging.Logger;
 
 import org.jetbrains.annotations.*;
 
@@ -27,6 +28,7 @@ public class JavaSupport
         Image createMultiResolutionImage(int baseImageWidth, int baseImageHeight, @NotNull BufferedImage im);
     }
 
+    private static final Logger LOG = Logger.getLogger(JavaSupport.class.getName());
     private final static JavaSupportImpl impl = findImpl();
 
     public static int getScaleFactor(@NotNull Graphics g)
@@ -42,7 +44,7 @@ public class JavaSupport
     private static JavaSupportImpl findImpl()
     {
         int version = obtainJavaVersion();
-        System.err.println("Java version: " + version);
+        LOG.fine("Java version: " + version);
         String className;
         if (version >= 900000) {
             className = "Java9Support";
