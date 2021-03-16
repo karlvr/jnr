@@ -35,7 +35,6 @@ void setAppearance(NSUInteger appearanceID) {
             NSString *appearanceName = (NSString *) knownAppearanceNames[appearanceID];
             configuredAppearance = [NSAppearance appearanceNamed:appearanceName];
             configuredAppearanceID = appearanceID;
-            NSLog(@"Selected appearance: %@", appearanceName);
         } else {
             NSLog(@"Invalid appearance ID: %ld", (long) appearanceID);
             configuredAppearance = [NSAppearance appearanceNamed:NSAppearanceNameAqua];
