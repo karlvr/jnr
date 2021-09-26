@@ -47,7 +47,7 @@
 
     <!-- Note: open source JavaNativeFoundation is required to build for arm, see https://github.com/apple/openjdk -->
 
-    <property name="JNFdir" location="${SDKroot}/System/Library/Frameworks/JavaVM.framework/Versions/A/Frameworks"/>
+    <property name="JNFdir" location="/Applications/Charles.app/Contents/Frameworks"/>
 
     <property name="debug" value="false"/>
     <property name="debugoption" value=""/>
@@ -195,7 +195,7 @@
                     <arg value="Cocoa"/>
                     <arg line="${additional.jni.frameworks}"/>
 
-                    <arg value="-F/${SDKroot}/System/Library/Frameworks/JavaVM.framework/Versions/A/Frameworks"/>
+                    <arg value="-F/Applications/Charles.app/Contents/Frameworks"/>
                     <arg value="-framework"/>
                     <arg value="JavaRuntimeSupport"/>
                     <arg value="-F${JNFdir}"/>
