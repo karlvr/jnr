@@ -20,7 +20,7 @@
   <property name="artifactCoordinates" value="org.violetlib:jnr:${RELEASE}"/>
 
   <use key="org.jetbrains:annotations" version="20.1.0" scope="compile"/>
-  <use key="org.violetlib:vappearances" version="4"/>
+  <use key="org.violetlib:vappearances" version="5-SNAPSHOT"/>
 
   <property name="base" location="../.."/>
   <property name="src" location="${base}/src"/>
